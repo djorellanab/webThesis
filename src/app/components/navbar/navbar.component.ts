@@ -20,6 +20,7 @@ export class NavbarComponent implements OnInit {
     this.listTitles = ROUTES.filter(listTitle => listTitle);
   }
   getTitle(){
+    console.log("carga titulo");
     var titlee = this.location.prepareExternalUrl(this.location.path());
     if(titlee.charAt(0) === '#'){
         titlee = titlee.slice( 2 );

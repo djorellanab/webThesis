@@ -9,7 +9,7 @@ declare interface RouteInfo {
 }
 export const ROUTES: RouteInfo[] = [
     { path: '/dashboard', title: 'Dashboard',  icon: 'ni-tv-2 text-primary', class: '' },
-    { path: '/', title: 'Movimiento funcional',  icon:'ni-planet text-blue', class: '' },
+
 ];
 
 @Component({
@@ -26,6 +26,7 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit() {
     this.menuItems = ROUTES.filter(menuItem => menuItem);
+    console.log(this.menuItems);
     this.router.events.subscribe((event) => {
       this.isCollapsed = true;
    });
