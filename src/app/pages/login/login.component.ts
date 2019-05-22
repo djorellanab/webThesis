@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   this.authenticationService.logout();
 
   // get return url from route parameters or default to '/'
-  this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+  this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
   }
   ngOnDestroy() {
   }
@@ -53,9 +53,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         .pipe(first())
         .subscribe(
             data => {
-              this.router.navigate(['/dashboard'], {
-                queryParams: {refresh: true}
-             });
+              this.router.navigate([  this.returnUrl]);
             },
             error => {
                 this.error = error;

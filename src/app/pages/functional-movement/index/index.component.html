@@ -1,0 +1,94 @@
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8"></div>
+<div class="container-fluid mt--7">
+  <div class="row">
+    <div class="col">
+      <div class="card shadow">
+        <div class="card-header bg-transparent">
+          <h3 class="mb-0">Movimientos funcionales</h3>
+          <button type="button" class="btn btn-primary btn-lg btn-block">Insertar un movimiento funcional</button>
+          <img *ngIf="loading" class="pl-2" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+          <div *ngIf="error" class="alert alert-danger">{{error}}</div>
+        </div>
+        <div class="table-responsive">
+          <table class="table align-items-center table-flush">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Movimiento funcional</th>
+                <th scope="col">GDB</th>
+                <th scope="col">Metadata</th>
+                <th scope="col">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row" *ngFor="let fm of functionalMovements">
+                  <div class="media align-items-center">
+                    <div class="media-body">
+                      <span class="mb-0 text-sm">{{fm.name}}</span>
+                    </div>
+                  </div>
+                  <td>
+                    <div *ngIf="fm.gdb; else notgba">
+                       Descargar gdb
+                    </div>
+                    <ng-template #notgba>
+                        Sin gba
+                    </ng-template>
+                  </td>
+                  <td>
+                    descargar METADATA
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-default" data-id="${fm._id}" data-action="see">Ver</button>
+                    <button type="button" class="btn btn-primary" data-id="${fm._id}" data-action="train">Entrenar</button>
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal"  data-id="${fm._id}" data-action="delete" data-delete-name="${fm.name}">Eliminar</button>
+                  </td>
+                </th>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer py-4">
+            <nav aria-label="...">
+              <ul class="pagination justify-content-end mb-0">
+                <li class="page-item" *ngIf="page===1">
+                  <a class="page-link" href="javascript:void(0)" tabindex="-1">
+                    <i class="fas fa-angle-left"></i>
+                    <span class="sr-only">Anterior</span>
+                  </a>
+                </li>
+                <li class="page-item active">
+                  <a class="page-link" >{{page}} <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="page-item" *ngFor="let pages of pagination"> 
+                  <a class="page-link" ></a> {{pages}} </a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link"  *ngIf="page===maxPages">
+                    <i class="fas fa-angle-right"></i>
+                    <span class="sr-only">Siguiente</span>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Deseas eliminar el movimiento funcional: {{dataDelete.name}}?</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" #btnClose class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          <button type="button" (click)="deleteMF()" class="btn btn-primary" data-dismiss="modal">Eliminar</button>
+        </div>
+      </div>
+    </div>
+  </div>
