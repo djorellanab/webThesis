@@ -9,7 +9,7 @@ declare interface RouteInfo {
 }
 export const ROUTES: RouteInfo[] = [
     { path: '/dashboard', title: 'Dashboard',  icon: 'ni-tv-2 text-primary', class: '' },
-
+    { path: '/functionalmovement', title: 'Movimiento Funcional',  icon: 'ni-user-run text-primary', class: '' },
 ];
 
 @Component({

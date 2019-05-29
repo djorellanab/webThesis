@@ -6,10 +6,13 @@
       <div class="card shadow">
         <div class="card-header bg-transparent">
           <h3 class="mb-0">Crear un movimiento funcional</h3>
+        </div>
+        <div class="card-body">
           <form role="form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
             <div class="form-group mb-3">
               <div class="input-group input-group-alternative">
-                <input class="form-control" placeholder="Nombre" type="text" formControlName="name" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+                <input class="form-control" placeholder="Nombre" type="text" formControlName="name"
+                  [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
                 <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
                   <div *ngIf="f.name.errors.required">Nombre del movimiento funcional requerido</div>
                 </div>
@@ -17,54 +20,72 @@
             </div>
             <div class="form-group mb-3">
               <div class="input-group input-group-alternative">
-                <textarea class="form-control form-control-alternative" rows="3" placeholder="Detalle del movimiento funcional" formControlName="description"></textarea>
+                <textarea class="form-control form-control-alternative" rows="3"
+                  placeholder="Detalle del movimiento funcional" formControlName="description"></textarea>
               </div>
             </div>
             <div class="form-group mb-3">
               <div class="input-group input-group-alternative">
-                <input class="form-control" type="number" step="1" min="1" max="6" formControlName="steps" [ngClass]="{ 'is-invalid': submitted && f.steps.errors }" />
+                <input class="form-control" type="number" step="1" min="1" max="6" formControlName="steps"
+                  [ngClass]="{ 'is-invalid': submitted && f.steps.errors }" />
                 <div *ngIf="submitted && f.steps.errors" class="invalid-feedback">
                   <div *ngIf="f.steps.errors.required">Los pasos son requeridos</div>
                 </div>
               </div>
             </div>
             <div class="form-group mb-3">
-                <div class="input-group input-group-alternative">
-                  <label class="custom-control-label" >Profundidad de los datos tomado</label>
-                  <input class="form-control" type="number" formControlName="depth" [ngClass]="{ 'is-invalid': submitted && f.depth.errors }" />
-                  <div *ngIf="submitted && f.depth.errors" class="invalid-feedback">
-                    <div *ngIf="f.depth.errors.required">La profundidad es requerido</div>
-                  </div>
+              <div class="input-group input-group-alternative">
+                <label class="custom-control-label">Profundidad minima de los datos tomado</label>
+                <input class="form-control" type="number" formControlName="depthMin"
+                  [ngClass]="{ 'is-invalid': submitted && f.depthMin.errors }" />
+                <div *ngIf="submitted && f.depthMin.errors" class="invalid-feedback">
+                  <div *ngIf="f.depthMin.errors.required">La profundidad minima es requerido</div>
                 </div>
               </div>
-              <div class="form-group mb-3">
-                  <div class="input-group input-group-alternative">
-                    <label class="custom-control-label" >Altura del Kinect</label>
-                    <input class="form-control" type="number" formControlName="height" [ngClass]="{ 'is-invalid': submitted && f.height.errors }" />
-                    <div *ngIf="submitted && f.height.errors" class="invalid-feedback">
-                      <div *ngIf="f.height.errors.required">La altura es requerido</div>
-                    </div>
-                  </div>
-                </div>
+            </div>
             <div class="form-group mb-3">
               <div class="input-group input-group-alternative">
-                <label class="custom-control-label" >Cantidad de pasos requeridos</label>
-                <input class="form-control" type="number" step="1" min="1" max="6" formControlName="steps" [ngClass]="{ 'is-invalid': submitted && f.steps.errors }" />
+                <label class="custom-control-label">Profundidad maxima de los datos tomado</label>
+                <input class="form-control" type="number" formControlName="depthMax"
+                  [ngClass]="{ 'is-invalid': submitted && f.depthMax.errors }" />
+                <div *ngIf="submitted && f.depthMax.errors" class="invalid-feedback">
+                  <div *ngIf="f.depthMax.errors.required">La profundidad maxima es requerido</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group mb-3">
+              <div class="input-group input-group-alternative">
+                <label class="custom-control-label">Altura del Kinect</label>
+                <input class="form-control" type="number" formControlName="height"
+                  [ngClass]="{ 'is-invalid': submitted && f.height.errors }" />
+                <div *ngIf="submitted && f.height.errors" class="invalid-feedback">
+                  <div *ngIf="f.height.errors.required">La altura es requerido</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group mb-3">
+              <div class="input-group input-group-alternative">
+                <label class="custom-control-label">Cantidad de pasos requeridos</label>
+                <input class="form-control" type="number" step="1" min="1" max="6" formControlName="steps"
+                  [ngClass]="{ 'is-invalid': submitted && f.steps.errors }" />
                 <div *ngIf="submitted && f.steps.errors" class="invalid-feedback">
                   <div *ngIf="f.steps.errors.required">Los pasos son requeridos</div>
                 </div>
               </div>
             </div>
-            <div class="custom-control custom-checkbox mb-3" formArrayName="anglesOfMovement" *ngFor="let angle of createForm.controls.anglesOfMovement.controls; let i = index">
-              <input class="custom-control-input"  type="checkbox" [formControlName]="i">
-              <label class="custom-control-label" > {{angleReferences[i].name}}</label>
+            <div class="custom-control custom-checkbox mb-3" formArrayName="anglesOfMovement"
+              *ngFor="let angle of createForm.controls.anglesOfMovement.controls; let i = index">
+              <input class="custom-control-input" type="checkbox" [formControlName]="i">
+              <label class="custom-control-label"> {{angleReferences[i].name}}</label>
             </div>
-            <img *ngIf="loading" class="pl-2" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+            <img *ngIf="loading" class="pl-2"
+              src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
             <div class="text-center">
               <button type="button" class="btn btn-primary my-4" type="submit">Ingresar movimiento funcional</button>
             </div>
             <div *ngIf="error" class="alert alert-danger">{{error}}</div>
           </form>
+
         </div>
       </div>
     </div>

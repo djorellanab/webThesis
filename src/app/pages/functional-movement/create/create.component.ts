@@ -15,13 +15,11 @@ export class FunctionalMovementCreateComponent implements OnInit, OnDestroy {
   createForm: FormGroup;
   loading = false;
   submitted = false;
-  returnUrl: string;
   error = '';
   angleReferences = [];
 
   constructor(
     private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
     private router: Router,
     private functionalMovementService: FunctionalMovementService) { }
 
@@ -33,10 +31,10 @@ export class FunctionalMovementCreateComponent implements OnInit, OnDestroy {
       description: [''],
       steps: ['', Validators.required],
       height: ['', Validators.required],
-      depth: ['', Validators.required],
+      depthMin: ['', Validators.required],
+      depthMax: ['', Validators.required],
       anglesOfMovement: new FormArray(formControls)
     });
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
   }
   ngOnDestroy() { }
 
@@ -65,13 +63,13 @@ export class FunctionalMovementCreateComponent implements OnInit, OnDestroy {
     }
 
     let fm = new FunctionalMovement(0, this.f.name.value, stepsTags, selectedPreferences,
-       this.f.description.value, this.f.height.value, this.f.depth.value);
+       this.f.description.value, this.f.height.value, this.f.depthMin.value, this.f.depthMax.value);
 
     this.functionalMovementService.post(fm)
     .pipe(first())
     .subscribe(
         data => {
-          this.router.navigate([this.returnUrl]);
+          this.router.navigate(["/functionalmovement"]);
         },
         error => {
             this.error = error;

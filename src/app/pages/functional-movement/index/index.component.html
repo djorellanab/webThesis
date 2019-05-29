@@ -20,30 +20,31 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <th scope="row" *ngFor="let fm of functionalMovements">
+              <tr *ngFor="let fm of functionalMovements">
+                <th scope="row">
                   <div class="media align-items-center">
                     <div class="media-body">
                       <span class="mb-0 text-sm">{{fm.name}}</span>
                     </div>
                   </div>
-                  <td>
-                    <div *ngIf="fm.gdb; else notgba">
-                       Descargar gdb
-                    </div>
-                    <ng-template #notgba>
-                        Sin gba
-                    </ng-template>
-                  </td>
-                  <td>
-                    descargar METADATA
-                  </td>
-                  <td>
-                    <button type="button" class="btn btn-default" data-id="${fm._id}" data-action="see">Ver</button>
-                    <button type="button" class="btn btn-primary" data-id="${fm._id}" data-action="train">Entrenar</button>
-                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal"  data-id="${fm._id}" data-action="delete" data-delete-name="${fm.name}">Eliminar</button>
-                  </td>
                 </th>
+                <td>
+                  <div *ngIf="fm.file; else notgba">
+                    <button type="button"  data-id="${fm._id}" data-action="gbd" class="btn btn-primary">Descargar gbd</button>
+                  </div>
+                  <ng-template #notgba>
+                    Sin base de datos de gesturas
+                  </ng-template>
+                </td>
+                <td>
+                  <button type="button"  data-id="${fm._id}" data-action="metadata" class="btn btn-primary">Descargar metadata</button>
+                </td>
+                <td>
+                  <button type="button" class="btn btn-default" data-id="${fm._id}" data-action="see">Ver</button>
+                  <button type="button" class="btn btn-primary" data-id="${fm._id}" data-action="train">Entrenar</button>
+                  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" data-id="${fm._id}"
+                    data-action="delete" data-delete-name="${fm.name}">Eliminar</button>
+                </td>
               </tr>
             </tbody>
           </table>

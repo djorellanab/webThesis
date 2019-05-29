@@ -1,0 +1,130 @@
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8"></div>
+<div class="container-fluid mt--7">
+  <!-- Table -->
+  <div class="row">
+    <div class="col-xl-4 order-xl-2 mb-5 mb-xl-0">
+      <div class="card shadow">
+        <div class="card-header bg-transparent">
+          <h3 class="mb-0">Datos del gbd</h3>
+        </div>
+        <div class="card-body">
+          <div *ngIf="!idFile; else notgba">
+            <div class="col-md-6">
+              <div *ngIf="fileUpload.status==='error'">
+                <div [innerHTML]="fileUpload.message"></div>
+              </div>
+              <div *ngIf="fileUpload.status==='progress'">
+                <div class="progress" style="height: 20px;margin-bottom:20px;">
+                  <div class="progress-bar" role="progressbar" [style.width.%]="fileUpload.message" aria-valuenow="25"
+                    aria-valuemin="0" aria-valuemax="100">{{fileUpload.message}}%</div>
+                </div>
+              </div>
+              <form [formGroup]="fileForm" (ngSubmit)="onSubmitFile()">
+                <h2>Selecciona el archivo gbd</h2>
+                <div class="form-group mb-3">
+                  <div class="input-group input-group-alternative">
+                    <input class="form-control" type="file" name="profile" (change)="onSelectedFile($event)"
+                      accept=".gbd" />
+                  </div>
+                </div>
+                <div class="text-center">
+                  <button type="button" class="btn btn-primary my-4" type="submit">Subir el archivo gbd</button>
+                </div>
+              </form>
+              <div *ngIf="fileUpload.status==='success'">
+                <p>Se ha cargado el archivo</p>
+              </div>
+              <p>{{ errorFile }}</p>
+            </div>
+          </div>
+          <ng-template #notgba>
+            <button type="button" (click)="downloadGBD()" class="btn btn-primary">Descargar gbd</button>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-8 order-xl-1">
+      <div class="card bg-default shadow">
+        <div class="card-header bg-transparent border-0">
+          <h3 class="text-white mb-0">Actualizacion de datos</h3>
+        </div>
+        <div class="card-body">
+          <form role="form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <div class="form-group mb-3">
+              <div class="input-group input-group-alternative">
+                <input class="form-control" placeholder="Nombre" type="text" formControlName="name" readonly />
+              </div>
+            </div>
+            <div class="form-group mb-3">
+              <div class="input-group input-group-alternative">
+                <textarea class="form-control form-control-alternative" rows="3"
+                  placeholder="Detalle del movimiento funcional" formControlName="description"></textarea>
+              </div>
+            </div>
+            <div class="form-group mb-3">
+              <div class="input-group input-group-alternative">
+                <label class="custom-control-label">Valor del factor del movimiento</label>
+                <input class="form-control" type="number" formControlName="movementFactor" min="0" max="1" />
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="table align-items-center table-flush">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">Paso</th>
+                    <th scope="col">Valor</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let step of stepsReferences; i = index">
+                    <th scope="row">
+                      <div class="media align-items-center">
+                        <div class="media-body">
+                          <span class="mb-0 text-sm"> Paso {{i+1}}</span>
+                        </div>
+                      </div>
+                    </th>
+                    <td>
+                      {{step}}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="form-group mb-3">
+              <div class="input-group input-group-alternative">
+                <label class="custom-control-label">Profundidad minima de los datos tomado</label>
+                <input class="form-control" type="number" formControlName="depthMin" readonly />
+              </div>
+            </div>
+            <div class="form-group mb-3">
+              <div class="input-group input-group-alternative">
+                <label class="custom-control-label">Profundidad maxima de los datos tomado</label>
+                <input class="form-control" type="number" formControlName="depthMax" readonly />
+              </div>
+            </div>
+            <div class="form-group mb-3">
+              <div class="input-group input-group-alternative">
+                <label class="custom-control-label">Altura del Kinect</label>
+                <input class="form-control" type="number" formControlName="height" readonly />
+              </div>
+            </div>
+            <div class="custom-control custom-checkbox mb-3" formArrayName="anglesOfMovement"
+              *ngFor="let angle of createForm.controls.anglesOfMovement.controls; let i = index">
+              <input class="custom-control-input" type="checkbox" [formControlName]="i"
+                checked="{{angleReferences[i].checked}}" disabled="true">
+              <label class="custom-control-label"> {{angleReferences[i].name}}</label>
+            </div>
+            <img *ngIf="loading" class="pl-2"
+              src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+            <div class="text-center">
+              <button type="button" class="btn btn-primary my-4" type="submit">Actualizar movimiento
+                funcional</button>
+            </div>
+            <div *ngIf="error" class="alert alert-danger">{{error}}</div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

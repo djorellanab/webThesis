@@ -23,11 +23,15 @@ export class FunctionalMovementService {
         return this.http.get<any>(`${AppConstants.baseURL}/api/v1/functionalmovement/${id}`);
     }
 
-    put(id: string, description: string, movementFactor: number, anglesOfMovement:number[] ){
-        return this.http.put<any>(`${AppConstants.baseURL}/api/v1/functionalmovement/${id}`, {description, movementFactor, anglesOfMovement});
+    put(id: string, description: string, movementFactor: number){
+        return this.http.put<any>(`${AppConstants.baseURL}/api/v1/functionalmovement/${id}`, {description, movementFactor});
     }
 
     delete(id: string){
         return this.http.delete<any>(`${AppConstants.baseURL}/api/v1/functionalmovement/${id}`);
+    }
+
+    getMetadata(id: string){
+        return this.http.get<any>(`${AppConstants.baseURL}/api/v1/functionalmovement/metadata/${id}`);
     }
 }

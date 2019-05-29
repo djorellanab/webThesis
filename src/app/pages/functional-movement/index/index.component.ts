@@ -5,7 +5,7 @@ import { FunctionalMovementService } from '../../../services/functional-movement
 import { AppConstants } from '../../../app.constants';
 import { AppUtils } from '../../../app.utils';
 import { first } from 'rxjs/operators';
-
+import { FileService} from '../../../services/file.service';
 
 @Component({
   selector: 'app-functional-movement-index',
@@ -27,7 +27,8 @@ export class FunctionalMovementIndexComponent implements OnInit, OnDestroy, Afte
     private route: ActivatedRoute,
     private router: Router,
     private functionalMovementService: FunctionalMovementService,
-    private renderer: Renderer) { }
+    private renderer: Renderer,
+    private fileService: FileService) { }
 
   ngOnInit() { 
     this.loading = true;
@@ -60,6 +61,30 @@ export class FunctionalMovementIndexComponent implements OnInit, OnDestroy, Afte
         let _action = event.target.getAttribute("data-action");
         if (_action === "see") {
           this.router.navigate(["/functionalmovement/" + event.target.getAttribute("data-id")]);
+        }
+        else if (_action === "gbd") {
+          this.fileService.getById(event.target.getAttribute("data-id"))
+          .pipe(first())
+          .subscribe(
+              data => {
+                //AppUtils.saveFile(data,"");
+              },
+              error => {
+                  this.error = error;
+                  this.loading = false;
+              });
+        }
+        else if (_action === "metadata") {
+          this.functionalMovementService.getMetadata(event.target.getAttribute("data-id"))
+          .pipe(first())
+          .subscribe(
+              data => {
+                //AppUtils.saveFile(data,"");
+              },
+              error => {
+                  this.error = error;
+                  this.loading = false;
+              });
         }
         else if(_action === "train"){
           this.router.navigate(["/train/" + event.target.getAttribute("data-id")]);
