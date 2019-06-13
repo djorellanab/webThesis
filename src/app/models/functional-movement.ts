@@ -1,5 +1,6 @@
+import {getJointName} from "./enums/joints";
 export class FunctionalMovement {
-    id: number;
+    _id: string;
     name: string;
     steps: number[];
     anglesOfMovement: number[];
@@ -12,12 +13,18 @@ export class FunctionalMovement {
     time_stamp_hour?: number;
     state?: boolean;
     file?: string;
+    focusJoin: number; 
 
-    constructor(id:number, name:string, steps:number[], anglesOfMovement:number[], description:string,
-        height: number, depthMin: number, depthMax: number, state?: boolean, movementFactor?:number, gdb?:string, 
-        time_stamp?: number, time_stamp_hour?:number){
+    public get nameFocusJoin(): string{ return getJointName(this.focusJoin);}
+    public get namesAnglesOfMovement(): string[]{ 
+        return this.anglesOfMovement.map(e => getJointName(e) )
+    }
+    public static get  dummy(): FunctionalMovement { return new FunctionalMovement('','',[],[],'',0,0,0,0); }
+    constructor(id:string, name:string, steps:number[], anglesOfMovement:number[], description:string,
+        height: number, depthMin: number, depthMax: number,focusJoin: number, state?: boolean, movementFactor?:number, file?:string, 
+        time_stamp?: number){
         let date = new Date();
-        this.id = id;
+        this._id = id;
         this.name = name;
         this.steps = steps;
         this.anglesOfMovement = anglesOfMovement;
@@ -26,8 +33,9 @@ export class FunctionalMovement {
         this.depthMin = depthMin;
         this.depthMax = depthMax;
         this.movementFactor = movementFactor || 0.10;
-        this.time_stamp = time_stamp || date.getDate();
-        this.time_stamp_hour = time_stamp_hour || date.getHours();
+        this.time_stamp = time_stamp || date.getTime();
         this.state = state || false;
+        this.focusJoin = focusJoin;
+        this.file =  file;
     }
 }

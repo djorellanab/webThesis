@@ -1,7 +1,7 @@
 import { DetailOfStepFunctionalMovement } from "./detail-of-step-functional-movement";
 
 export class StepFunctionalMovement {
-    functionalMovement: number;
+    functionalMovement: string;
     step: number;
     time: number;
     clasification: boolean;
@@ -20,11 +20,11 @@ export class StepFunctionalMovement {
 
     
     static dummy():StepFunctionalMovement{
-        return new StepFunctionalMovement(0,0,0,false);
+        return new StepFunctionalMovement("",0,0,false);
     }
 
 
-    constructor(functionalMovement: number, step:number, time:number, status:boolean, pathImage?:string) {
+    constructor(functionalMovement: string, step:number, time:number, status:boolean, pathImage?:string) {
         this.functionalMovement = functionalMovement;
         this.step = step;
         this.time = time;

@@ -2,6 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { getListAngles } from '../../../models/enums/angles-of-movement';
+import { getJointName } from '../../../models/enums/joints';
+import { FunctionalMovement } from '../../../models/functional-movement';
 import { FileService} from '../../../services/file.service';
 import { FunctionalMovementService } from '../../../services/functional-movement.service';
 import { first } from 'rxjs/operators';
@@ -19,12 +21,12 @@ export class FunctionalMovementUpdateComponent implements OnInit, OnDestroy {
   submitted = false;
   error = '';
   errorFile = '';
-  stepsReferences = [];
-  angleReferences = [];
+  steps: number[] = [];
+  angles: string[] = [];
   id: string = "";
   fileUpload = {status: '', message: '', filePath: ''};
   idFile:string;
-
+  fm: FunctionalMovement;
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -39,41 +41,29 @@ export class FunctionalMovementUpdateComponent implements OnInit, OnDestroy {
       profile: ['']
     });
 
-    const formControls = this.angleReferences.map(control => new FormControl(false));
+    this.fm = FunctionalMovement.dummy;
+
     this.createForm = this.formBuilder.group({
-      name: ['', Validators.required],
-      description: [''],
-      movementFactor: ["", Validators.required],
-      height: ['', Validators.required],
-      depthMin: ['', Validators.required],
-      depthMax: ['', Validators.required],
-      anglesOfMovement: new FormArray(formControls)
+      movementFactor: ['', Validators.required]
     });
 
-    this.loading = true;
+    this.loading = false;
     this.id = this.route.snapshot.params['id'];
-    this.angleReferences = getListAngles();
     this.functionalMovementService.getById(this.id)
       .pipe(first())
       .subscribe(
         data => {
-          this.angleReferences.map(angle =>{
-            angle.checked = data.anglesOfMovement.includes(angle.id);
-            return angle;
-          });
-          let checkedsAngles = this.angleReferences.map(angle => {
-            return this.formBuilder.control(angle.checked);
-          });
+          console.log(data);
+          this.fm = new FunctionalMovement(data.functionalMovements[0]._id, data.functionalMovements[0].name, data.functionalMovements[0].steps,
+             data.functionalMovements[0].anglesOfMovement, data.functionalMovements[0].description, data.functionalMovements[0].height, data.functionalMovements[0].depthMin,
+             data.functionalMovements[0].depthMax, data.functionalMovements[0].focusJoin, data.functionalMovements[0].state, data.functionalMovements[0].movementFactor,
+             data.functionalMovements[0].file, data.functionalMovements[0].time_stamp);
           this.createForm = this.formBuilder.group({
-            name: [data.name, Validators.required],
-            description: [data.description],
-            movementFactor: [data.movementFactor, Validators.required],
-            height: [data.height, Validators.required],
-            depthMin: [data.depthMin, Validators.required],
-            depthMax: [data.depthMax, Validators.required],
-            anglesOfMovement: checkedsAngles
+            movementFactor: [data.functionalMovements[0].movementFactor, Validators.required]
           });
-          this.idFile = data.file;
+          this.steps = data.functionalMovements[0].steps;
+          this.angles = this.fm.namesAnglesOfMovement;
+          this.idFile = data.functionalMovements[0].file;
           this.loading = false;
         },
         error => {
@@ -94,11 +84,7 @@ export class FunctionalMovementUpdateComponent implements OnInit, OnDestroy {
         return;
     }
 
-    /*let selectedPreferences:number[] = this.angleReferences
-    .filter(angle => angle.checked === true)
-    .map((angle) => {return angle.id});*/
-
-    this.functionalMovementService.put(this.id, this.f.description.value, this.f.movementFactor.value)
+    this.functionalMovementService.put(this.id, this.fm.description, this.f.movementFactor.value)
     .pipe(first())
     .subscribe(
         data => {
@@ -118,14 +104,22 @@ export class FunctionalMovementUpdateComponent implements OnInit, OnDestroy {
   }
 
   onSubmitFile(){
+    this.loading = true;
     const formData = new FormData();
     formData.append('id',this.id);
     formData.append('file',this.fileForm.get("profile").value);
 
-    this.fileService.post(formData).subscribe(
-      res => this.fileUpload = res,
-      err => this.errorFile = err
-    );
+    this.fileService.post(formData)
+    .pipe(first())
+    .subscribe(
+        data => {
+          this.idFile = data.idFile;
+          this.loading = false;
+        },
+        error => {
+            this.errorFile = error;
+            this.loading = false;
+        });
   }
 
   downloadGBD(){

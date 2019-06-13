@@ -1,4 +1,4 @@
-import { getAngleName, AnglesOfMovement} from './enums/angles-of-movement';
+import {getJointName} from './enums/joints';
 export class DetailOfStepFunctionalMovement {
     stepFunctionalMovement: number;
     join: number;
@@ -20,22 +20,6 @@ export class DetailOfStepFunctionalMovement {
       }
     
     public  get  nameAngle(): string { 
-        switch(this.join){
-            case  2: return "Cuello";
-            case  4: return "Hombro izquierdo";
-            case  8: return "Hombro derecho";
-            case  5: return "Codo izquierdo";
-            case  9: return "Codo derecho";
-            case  6: return "Muñeca izquierda";
-            case 10: return "Muñeca derecha";
-            case  1: return "Espalda";
-            case 12: return "Cadera izquierda";
-            case 16: return "Cadera derecha";
-            case 13: return "Rodilla izquierda";
-            case 17: return "Rodilla derecha";
-            case 14: return "Píe izquierdo";
-            case 18: return "Píe derecho";
-            default: return "Ángulo no identificado";
-        }
+        return getJointName(this.join);
     }
 }

@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 
 import { FunctionalMovement } from '../models/functional-movement';
 import{ AppConstants} from '../app.constants';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class FunctionalMovementService {
@@ -31,7 +32,9 @@ export class FunctionalMovementService {
         return this.http.delete<any>(`${AppConstants.baseURL}/api/v1/functionalmovement/${id}`);
     }
 
-    getMetadata(id: string){
-        return this.http.get<any>(`${AppConstants.baseURL}/api/v1/functionalmovement/metadata/${id}`);
+    getMetadata(id: string): Observable<HttpResponse<Blob>>{
+        return this.http.get<Blob>(`${AppConstants.baseURL}/api/v1/functionalmovement/metadata/${id}`,
+        { observe: 'response',
+          responseType: 'blob' as 'json'});
     }
 }

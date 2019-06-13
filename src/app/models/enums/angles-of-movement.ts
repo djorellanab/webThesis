@@ -1,37 +1,37 @@
 
 export function getListAngles(){
   return [
-    {id: 0, name: "Cuello",},
-    {id: 1, name: "Hombro izquierdo"},
-    {id: 2, name: "Hombro derecho"},
-    {id: 3, name: "Codo izquierdo"},
-    {id: 4, name: "Codo derecho"},
-    {id: 5, name: "Muñeca izquerda"},
-    {id: 6, name: "Muñeca derecha"},
-    {id: 7, name: "Espalda"},
-    {id: 8, name: "Cadera izquiera"},
-    {id: 9, name: "Cadera derecha"},
-    {id: 10, name: "Rodilla izquierda"},
-    {id: 11, name: "Rodilla derecha"},
-    {id: 12, name: "Píe Izquierdo"},
-    {id: 13, name: "Píe Derecho"}];
+    {id: 2, name: "Cuello",},
+    {id: 4, name: "Hombro izquierdo"},
+    {id: 8, name: "Hombro derecho"},
+    {id: 5, name: "Codo izquierdo"},
+    {id: 9, name: "Codo derecho"},
+    {id: 6, name: "Muñeca izquerda"},
+    {id: 10, name: "Muñeca derecha"},
+    {id: 1, name: "Espalda"},
+    {id: 12, name: "Cadera izquiera"},
+    {id: 16, name: "Cadera derecha"},
+    {id: 13, name: "Rodilla izquierda"},
+    {id: 17, name: "Rodilla derecha"},
+    {id: 15, name: "Píe Izquierdo"},
+    {id: 19, name: "Píe Derecho"}];
 }
 
 export enum AnglesOfMovement{
-  Neck = 0,
-  ShoulderLeft = 1,
-  ShoulderRight = 2,
-  ElbowLeft = 3,
-  ElbowRight = 4,
-  WristLeft =  5,
-  WristRight = 6,
-  Spine = 7,
-  HipLeft = 8,
-  HipRight = 9,
-  KnewLeft = 10,
-  KnewRight = 11,
-  FootLeft = 12,
-  FootRight = 13
+  Neck = 2,
+  ShoulderLeft = 4,
+  ShoulderRight = 8,
+  ElbowLeft = 5,
+  ElbowRight = 9,
+  WristLeft =  6,
+  WristRight = 10,
+  Spine = 1,
+  HipLeft = 12,
+  HipRight = 16,
+  KnewLeft = 13,
+  KnewRight = 17,
+  FootLeft = 15,
+  FootRight = 19
 }
 
 export function getAngleName(angle:AnglesOfMovement):string{

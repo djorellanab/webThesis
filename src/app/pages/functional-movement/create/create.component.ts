@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl  } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { getListAngles } from '../../../models/enums/angles-of-movement';
+import { getListJoints } from '../../../models/enums/joints';
 import { FunctionalMovement } from '../../../models/functional-movement';
 import { FunctionalMovementService } from '../../../services/functional-movement.service';
 import { first } from 'rxjs/operators';
@@ -17,6 +18,8 @@ export class FunctionalMovementCreateComponent implements OnInit, OnDestroy {
   submitted = false;
   error = '';
   angleReferences = [];
+  jointsReferences = [];
+  checkAngles = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -25,35 +28,47 @@ export class FunctionalMovementCreateComponent implements OnInit, OnDestroy {
 
   ngOnInit() { 
     this.angleReferences = getListAngles();
+    this.jointsReferences = getListJoints();
     const formControls = this.angleReferences.map(control => new FormControl(false));
     this.createForm = this.formBuilder.group({
       name: ['', Validators.required],
-      description: [''],
+      description: ['',Validators.required],
       steps: ['', Validators.required],
       height: ['', Validators.required],
       depthMin: ['', Validators.required],
       depthMax: ['', Validators.required],
-      anglesOfMovement: new FormArray(formControls)
+      anglesOfMovement: new FormArray(formControls),
+      focusJoin:  ['', Validators.required],
     });
   }
   ngOnDestroy() { }
 
   get f() { return this.createForm.controls; }
 
+  changeJoint(e) {
+    //this.createForm.get("focusJoin").setValue(e.target.value.split(':')[1]);
+  }
+    
   onSubmit() {
 
     this.submitted = true;
+
+    let selectedPreferences:number[] = this.f.anglesOfMovement.value
+    .map((checked, index) => checked ? this.angleReferences[index].id : null)
+    .filter(value => value !== null);
+    if(selectedPreferences.length===0){ 
+      this.checkAngles = true;
+      return;
+    }else{
+      this.checkAngles = false;
+    }
 
     // stop here if form is invalid
     if (this.createForm.invalid) {
         return;
     }
 
-    let selectedPreferences:number[] = this.f.anglesOfMovement.value
-    .map((checked, index) => checked ? this.angleReferences[index].id : null)
-    .filter(value => value !== null);
-
-    let tagValue:number = 1/this.f.steps.value;
+    let tagValue:number = 1/(this.f.steps.value-1);
     tagValue = parseFloat(tagValue.toFixed(2)); 
 
     let stepsTags:number[] = [];
@@ -62,19 +77,24 @@ export class FunctionalMovementCreateComponent implements OnInit, OnDestroy {
       stepsTags.push(tagValue*index);
     }
 
-    let fm = new FunctionalMovement(0, this.f.name.value, stepsTags, selectedPreferences,
-       this.f.description.value, this.f.height.value, this.f.depthMin.value, this.f.depthMax.value);
-
+    let fm = new FunctionalMovement('', this.f.name.value, stepsTags, selectedPreferences,
+       this.f.description.value, this.f.height.value, this.f.depthMin.value, this.f.depthMax.value, 
+       this.f.focusJoin.value);
+    console.log(fm);
     this.functionalMovementService.post(fm)
     .pipe(first())
     .subscribe(
         data => {
-          this.router.navigate(["/functionalmovement"]);
+          this.router.navigate(["/functionalmovement/" + data.functionalMovements[0]._id]);
         },
         error => {
             this.error = error;
             this.loading = false;
         });
+  }
+
+  backIndex(): void{
+    this.router.navigate(["/functionalmovement"]);
   }
 
 }

@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpEvent, HttpEventType, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpEventType, HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { RequestOptions, ResponseContentType } from '@angular/http';
 import{ AppConstants} from '../app.constants';
 import { map, catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { throwError, Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class FileService {
@@ -10,17 +11,20 @@ export class FileService {
     constructor(private http: HttpClient) {}
 
     post(formData:FormData){
-        return this.http.post<any>(`${AppConstants.apiFileURL}/api/v1/upload`, formData,{
+        return this.http.post<any>(`${AppConstants.apiFileURL}/api/v1/upload`, formData);
+        /* this.http.post<any>(`${AppConstants.apiFileURL}/api/v1/upload`, formData,{
             reportProgress: true,
             observe: "events"
         }).pipe(
             map(event => this.getEventMessage(event, formData)),
             catchError(this.handleError)
-        );
+        );*/
     }
 
-    getById(id: string){
-        return this.http.get<any>(`${AppConstants.apiFileURL}/api/v1/upload/${id}`);
+    getById(id: string): Observable<HttpResponse<Blob>>{
+        return this.http.get<Blob>(`${AppConstants.apiFileURL}/api/v1/upload/${id}`,
+         { observe: 'response',
+            responseType: 'blob' as 'json'});
     }
 
     private getEventMessage(event: HttpEvent<any>, formData){
