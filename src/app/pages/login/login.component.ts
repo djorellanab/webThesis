@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 import { AuthenticationService } from '../../services/authentication.service';
+import {AppUtils} from '../../app.utils';
 
 @Component({
   selector: 'app-login',
@@ -49,7 +50,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     this.loading = true;
-    this.authenticationService.login(this.f.username.value, this.f.password.value)
+    let passwordCrypt = AppUtils.getPasswordCrypt(this.f.password.value);
+    this.authenticationService.login(this.f.username.value, passwordCrypt)
         .pipe(first())
         .subscribe(
             data => {

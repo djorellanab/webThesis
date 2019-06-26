@@ -1,43 +1,92 @@
 <div class="header bg-gradient-danger pb-8 pt-5 pt-md-8"></div>
 <div class="container-fluid mt--7">
     <div class="row">
-        <div class="col-xl-4 order-xl-2 mb-5 mb-xl-0">
+        <div class="col-xl-6 order-xl-2 mb-5 mb-xl-0">
+            <img *ngIf="loading2" class="pl-2"
+                src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
             <div class="card shadow">
                 <div class="card-header bg-transparent">
-                    <h3 class="mb-0">Entrenamiento del movimiento funcional {{stepsDetail.name}}</h3>
+                    <h3 class="mb-0">Entrenamiento del movimiento funcional</h3>
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table align-items-center table-flush">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th scope="col">Paso</th>
-                                    <th scope="col">Cantidad de datos</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let step of stepsDetail.steps">
-                                    <th scope="row">
-                                        <div class="media align-items-center">
-                                            <div class="media-body">
-                                                <span class="mb-0 text-sm"> {{step.step}}</span>
+                    <form class="form-inline" [formGroup]="chartForm" (ngSubmit)="onSubmitChart()">
+                        <div class="form-group">
+                            <select class="form-control" formControlName="step" formControlName="step" [value]='0'>
+                                <option *ngFor="let step of stepsDetail.arraySteps" [ngValue]="step.step">
+                                    Paso {{step.step+1}}</option>
+                            </select>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="custom-radio-1" type="radio" id="inlineCheckbox1"
+                                formControlName="clasification" name="clasification" value="true" checked="checked">
+                            <label class="form-check-label" for="inlineCheckbox1">Bueno</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="custom-radio-1" type="radio" id="inlineCheckbox2"
+                                formControlName="clasification" name="clasification" value="false">
+                            <label class="form-check-label" for="inlineCheckbox2">Malo</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary mb-2">Obtener datos</button>
+                        <div *ngIf="error2" class="alert alert-danger">{{error2}}</div>
+                    </form>
+                    <hr>
+                    <div *ngIf="stadistics.length > 0; else notChart">
+                        <div class="form-check form-check-inline" *ngFor="let angle of anglesOfMovement">
+                            <input type="checkbox" value="{{angle.id}}" (change)="toggleVisibility($event)"
+                                checked="checked">
+                            <label>{{angle.name}}</label>
+                        </div>
+                    </div>
+                    <div class="chart">
+                        <canvas id="chart-mf" class="chart-canvas"></canvas>
+                    </div>
+                    <div *ngFor="let stadistic of stadistics">
+                        <div *ngIf="stadistic.table.length > 0">
+                            <h2>{{stadistic.nameTable}}</h2>
+                            <div class="table-responsive">
+                                <table class="table align-items-center table-flush">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col">Articulacion</th>
+                                            <th scope="col">Minimo</th>
+                                            <th scope="col">Promedio</th>
+                                            <th scope="col">Maximo</th>
+                                        </tr>
+                                    </thead>
+                                    <tr *ngFor="let dataTable of stadistic.table">
+                                        <th scope="row">
+                                            <div class="media align-items-center">
+                                                <div class="media-body">
+                                                    <span class="mb-0 text-sm">{{dataTable.name}}</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </th>
-                                    <td>
-                                        {{step.count}}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                        </th>
+                                        <td>
+                                            {{dataTable.min}}
+                                        </td>
+                                        <td>
+                                            {{dataTable.avg}}
+                                        </td>
+                                        <td>
+                                            {{dataTable.max}}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <ng-template #notChart>
+                    No se ha ingresado ningun dato en el paso respectivo.
+                </ng-template>
             </div>
         </div>
-        <div class="col-xl-8 order-xl-1">
-            <div class="card bg-default shadow">
-                <div class="card-header bg-transparent border-0">
-                    <h3 class="text-white mb-0">Ingresar datos de entrenamiento</h3>
+        <div class="col-xl-6 order-xl-1">
+            <img *ngIf="loading" class="pl-2"
+                src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+            <div class="card shadow">
+                <div class="card-header bg-transparent">
+                    <h3 class="mb-0">Ingresar datos de entrenamiento</h3>
                 </div>
                 <div class="card-body">
                     <form [formGroup]="fileForm" (ngSubmit)="onSubmitFile()">
@@ -49,59 +98,65 @@
                         </div>
                         <div class="text-center">
                             <button type="button" class="btn btn-primary my-4" type="submit">Analizar datos</button>
+                            <div *ngIf="error3" class="alert alert-danger">{{error3}}</div>
                         </div>
                     </form>
-                    <div *ngIf="stepFunctionalMovement.status; else notstatus">
-                        <h1>Archivo revisado</h1>
-                    </div>
-                    <ng-template #notstatus>
-                        <div class="card card-profile shadow">
-                            <img src="{{stepsFunctionalMovement[index].pathImage}}" class="card-img-top">
-                            <div class="card-body pt-0 pt-md-4">
-                                <div class="text-center">
-                                    Paso No. {{stepsFunctionalMovement[index].step + 1}}
-                                </div>
-                                <div class="table-responsive">
-                                    <table class="table align-items-center table-flush">
-                                        <thead class="thead-light">
-                                            <tr>
-                                                <th scope="col">Articulacion</th>
-                                                <th scope="col">Angulo</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr
-                                                *ngFor="let step of {stepsFunctionalMovement[index].detailsOfStepFunctionalMovement; i = index">
-                                                <th scope="row">
-                                                    <div class="media align-items-center">
-                                                        <div class="media-body">
-                                                            <span class="mb-0 text-sm">{{step.nameAngle()}}</span>
-                                                        </div>
-                                                    </div>
-                                                </th>
-                                                <td>
-                                                    {{step.angle}}
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <form [formGroup]="stepForm" (ngSubmit)="onSubmitStep()">
-                                    <div class="custom-control custom-control-alternative custom-radio mb-3">
-                                        <input name="custom-radio-1" class="custom-control-input" value="true"
-                                            type="radio" formControlName="clasification" id="customRadio1">
-                                        <label class="custom-control-label" for="customRadio1">Bueno</label>
-                                        <input name="custom-radio-1" class="custom-control-input" value="false"
-                                            type="radio" formControlName="clasification" id="customRadio2">
-                                        <label class="custom-control-label" for="customRadio2">Malo</label>
-                                    </div>
-                                    <div class="text-center">
-                                        <button type="button" class="btn btn-primary my-4" type="submit">Guardar Calificacion del paso</button>
-                                    </div>
-                                </form>
-                            </div>
+                    <hr />
+                    <div *ngIf="stepsFunctionalMovement.length > 0">
+                        <div class="text-center">
+                            <h3>Paso No. {{stepsFunctionalMovement[index].step + 1}}
+                                ({{index+1}}/{{stepsFunctionalMovement.length}})</h3>
+                            <img src="{{stepsFunctionalMovement[index].pathImage}}" class="img-thumbnai" height="300"
+                                width="300" alt="Posicion">
                         </div>
-                    </ng-template>
+                        <div class="table-responsive">
+                            <table class="table align-items-center table-flush">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th scope="col">Articulacion</th>
+                                        <th scope="col">Angulo</th>
+                                    </tr>
+                                </thead>
+                                <tr *ngFor="let step of stepsFunctionalMovement[index].detailsOfStepFunctionalMovement">
+                                    <th scope="row">
+                                        <div class="media align-items-center">
+                                            <div class="media-body">
+                                                <span class="mb-0 text-sm"> {{step.nameAngle}}</span>
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <td>
+                                        {{step.angle}}
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <form [formGroup]="stepForm" (ngSubmit)="onSubmitStep()">
+                            <div class="form-group row">
+                                <div class="col-md-3 offset-md-3">
+                                    <input name="custom-radio-1" class="form-check-input center" value="true"
+                                        type="radio" formControlName="clasification" name="clasification"
+                                        id="customRadio1">
+                                    <label class="form-check-label center" for="customRadio1"
+                                        checked="checked">Bueno</label>
+                                </div>
+                                <div class="col-md-3 offset-md-1">
+                                    <input name="custom-radio-1" class="form-check-input center" value="false"
+                                        type="radio" formControlName="clasification" name="clasification"
+                                        id="customRadio2">
+                                    <label class="form-check-label center" for="customRadio2">Malo</label>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="button" class="btn btn-primary my-4"
+                                    type="submit">{{messageTrain}}</button>
+                                <div *ngIf="error" class="alert alert-danger">{{error}}</div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="alert alert-success" *ngIf="messageFinalTrain">
+                        {{messageFinalTrain}}
+                    </div>
                 </div>
             </div>
         </div>

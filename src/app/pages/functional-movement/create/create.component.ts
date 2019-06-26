@@ -6,6 +6,7 @@ import { getListJoints } from '../../../models/enums/joints';
 import { FunctionalMovement } from '../../../models/functional-movement';
 import { FunctionalMovementService } from '../../../services/functional-movement.service';
 import { first } from 'rxjs/operators';
+import {ModalService } from '../../../services/modal.service';
 
 @Component({
   selector: 'app-functional-movement-create',
@@ -24,7 +25,8 @@ export class FunctionalMovementCreateComponent implements OnInit, OnDestroy {
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private functionalMovementService: FunctionalMovementService) { }
+    private functionalMovementService: FunctionalMovementService,
+    private modalService: ModalService) { }
 
   ngOnInit() { 
     this.angleReferences = getListAngles();
@@ -97,4 +99,13 @@ export class FunctionalMovementCreateComponent implements OnInit, OnDestroy {
     this.router.navigate(["/functionalmovement"]);
   }
 
+
+  openModal(id: string) {
+    console.log(id);
+    this.modalService.open(id);
+}
+
+closeModal(id: string) {
+    this.modalService.close(id);
+}
 }

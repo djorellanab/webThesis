@@ -29,6 +29,7 @@
                   <th scope="col">Movimiento funcional</th>
                   <th scope="col">GDB</th>
                   <th scope="col">Metadata</th>
+                  <th scope="col">CSV</th>
                   <th scope="col">Acciones</th>
                 </tr>
               </thead>
@@ -53,6 +54,10 @@
                   <td>
                     <button type="button" data-name="{{fm._id}}" data-action="metadata" class="btn btn-primary">Descargar
                       metadata</button>
+                  </td>
+                  <td>
+                      <button type="button" data-name="{{fm._id}}" data-action="csv" class="btn btn-primary">Descargar
+                        csv de entrenamiento</button>
                   </td>
                   <td>
                     <button type="button" class="btn btn-default"  data-name="{{fm._id}}"  data-action="see">Ver</button>

@@ -7,29 +7,40 @@ export class StepFunctionalMovement {
     clasification: boolean;
     detailsOfStepFunctionalMovement: DetailOfStepFunctionalMovement[]; 
     pathImage?:string;
-    status:boolean;
+    factorMovement: number;
 
     static decodeJson(json:any):StepFunctionalMovement{
-        let step = new StepFunctionalMovement(json.functionalMovement, json.step, json.time, json.status, json.pathImage);
+        if (json === undefined){
+            throw new Error("error Step object");
+        }else if(json.functionalMovement === undefined){
+            throw new Error("error functionalMovement");
+        }else if(!json.step === undefined){
+            throw new Error("error step");
+        }else if(!json.time === undefined){
+            throw new Error("error time");
+        }else if( !json.factorMovement === undefined){
+            throw new Error("error factorMovement");
+        }
+        let step = new StepFunctionalMovement(json.functionalMovement, json.step, json.time, json.factorMovement, json.pathImage);
         step.detailsOfStepFunctionalMovement = [];
         json.detailsOfStepFunctionalMovement.forEach(function (detail) {
-            step.detailsOfStepFunctionalMovement.push(DetailOfStepFunctionalMovement.decodeJson(json.detail));
+            step.detailsOfStepFunctionalMovement.push(DetailOfStepFunctionalMovement.decodeJson(detail));
         });
         return step;
     }
 
     
     static dummy():StepFunctionalMovement{
-        return new StepFunctionalMovement("",0,0,false);
+        return new StepFunctionalMovement("",0,0,0);
     }
 
 
-    constructor(functionalMovement: string, step:number, time:number, status:boolean, pathImage?:string) {
+    constructor(functionalMovement: string, step:number, time:number, factorMovement:number ,pathImage?:string) {
         this.functionalMovement = functionalMovement;
         this.step = step;
         this.time = time;
-        this.status = status;
         this.pathImage = pathImage;
+        this.factorMovement = factorMovement;
       }
     
 }

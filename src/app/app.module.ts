@@ -17,6 +17,7 @@ import { ComponentsModule } from './components/components.module';
 
 import { ErrorInterceptor } from './helpers/error.interceptor';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
+import { LoadingScreenInterceptor } from "./helpers/loading.interceptor";
 
 
 @NgModule({
@@ -33,11 +34,12 @@ import { JwtInterceptor } from './helpers/jwt.interceptor';
   declarations: [
     AppComponent,
     AdminLayoutComponent,
-    AuthLayoutComponent
+    AuthLayoutComponent,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: LoadingScreenInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

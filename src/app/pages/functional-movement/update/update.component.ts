@@ -21,12 +21,12 @@ export class FunctionalMovementUpdateComponent implements OnInit, OnDestroy {
   submitted = false;
   error = '';
   errorFile = '';
-  steps: number[] = [];
-  angles: string[] = [];
   id: string = "";
   fileUpload = {status: '', message: '', filePath: ''};
   idFile:string;
   fm: FunctionalMovement;
+  actualizado:string;
+
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -61,8 +61,6 @@ export class FunctionalMovementUpdateComponent implements OnInit, OnDestroy {
           this.createForm = this.formBuilder.group({
             movementFactor: [data.functionalMovements[0].movementFactor, Validators.required]
           });
-          this.steps = data.functionalMovements[0].steps;
-          this.angles = this.fm.namesAnglesOfMovement;
           this.idFile = data.functionalMovements[0].file;
           this.loading = false;
         },
@@ -76,7 +74,7 @@ export class FunctionalMovementUpdateComponent implements OnInit, OnDestroy {
   get f() { return this.createForm.controls; }
 
   onSubmit() {
-
+    this.actualizado = null;
     this.submitted = true;
 
     // stop here if form is invalid
@@ -84,11 +82,12 @@ export class FunctionalMovementUpdateComponent implements OnInit, OnDestroy {
         return;
     }
 
-    this.functionalMovementService.put(this.id, this.fm.description, this.f.movementFactor.value)
+    this.functionalMovementService.put(this.id, this.f.movementFactor.value)
     .pipe(first())
     .subscribe(
         data => {
-          this.router.navigate(["/functionalmovement"]);
+          this.fm.movementFactor = this.f.movementFactor.value;
+          this.actualizado = "Se ha actualizado el dato";
         },
         error => {
             this.error = error;
@@ -118,19 +117,6 @@ export class FunctionalMovementUpdateComponent implements OnInit, OnDestroy {
         },
         error => {
             this.errorFile = error;
-            this.loading = false;
-        });
-  }
-
-  downloadGBD(){
-    this.fileService.getById(this.idFile)
-    .pipe(first())
-    .subscribe(
-        data => {
-          //AppUtils.saveFile(data,"");
-        },
-        error => {
-            this.error = error;
             this.loading = false;
         });
   }

@@ -1,3 +1,7 @@
+<jw-modal id="custom-modal-1">
+    <h1>A Custom Angular 7 Modal!</h1>
+    <button (click)="closeModal('custom-modal-1');">Close</button>
+  </jw-modal>
 <div class="header bg-gradient-danger pb-8 pt-5 pt-md-8"></div>
 <div class="container-fluid mt--7">
   <!-- Table -->
@@ -7,6 +11,7 @@
         <div class="card-header bg-transparent">
           <h3 class="mb-0">Crear un movimiento funcional</h3>
           <button type="button" class="btn btn-secondary btn-lg" (click)="backIndex()">Regresar</button>
+          <button (click)="openModal('custom-modal-1')">Open Modal 1</button>
         </div>
         <div class="card-body">
           <form role="form" [formGroup]="createForm" (ngSubmit)="onSubmit()">

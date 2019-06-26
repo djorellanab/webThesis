@@ -19,6 +19,28 @@ export class FunctionalMovement {
     public get namesAnglesOfMovement(): string[]{ 
         return this.anglesOfMovement.map(e => getJointName(e) )
     }
+
+    public get rangeteps() : any[]{
+        if (this.steps.length <2) {return []}
+        let range = this.steps[1] - this.steps[0];
+        range *= this.movementFactor;
+        let total = this.steps.length - 1;
+        return this.steps.map((e, i) =>{
+            if (i === 0)
+            {
+                return {min: 0,  avg:0, max: range}
+            }
+            else if (i === total)
+            {
+                return {min: e-range,  avg:e, max: e}
+            }
+            else
+            {
+                let _range = range/2;
+                return {min: e-_range,  avg:e, max: e+_range}
+            }
+        });
+    }
     public static get  dummy(): FunctionalMovement { return new FunctionalMovement('','',[],[],'',0,0,0,0); }
     constructor(id:string, name:string, steps:number[], anglesOfMovement:number[], description:string,
         height: number, depthMin: number, depthMax: number,focusJoin: number, state?: boolean, movementFactor?:number, file?:string, 

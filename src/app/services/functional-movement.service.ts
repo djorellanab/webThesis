@@ -24,8 +24,8 @@ export class FunctionalMovementService {
         return this.http.get<any>(`${AppConstants.baseURL}/api/v1/functionalmovement/${id}`);
     }
 
-    put(id: string, description: string, movementFactor: number){
-        return this.http.put<any>(`${AppConstants.baseURL}/api/v1/functionalmovement/${id}`, {description, movementFactor});
+    put(id: string, movementFactor: number){
+        return this.http.put<any>(`${AppConstants.baseURL}/api/v1/functionalmovement/${id}`, {movementFactor});
     }
 
     delete(id: string){

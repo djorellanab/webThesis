@@ -11,6 +11,9 @@ import { DashboardComponent } from '../../pages/dashboard/dashboard.component';
 import { FunctionalMovementCreateComponent } from '../../pages/functional-movement/create/create.component';
 import { FunctionalMovementIndexComponent } from '../../pages/functional-movement/index/index.component';
 import { FunctionalMovementUpdateComponent } from '../../pages/functional-movement/update/update.component';
+import { ModalComponent } from '../../components/modal/modal.component'
+import { TrainComponent } from '../../pages/step-functional-movement/train/train.component';
+
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 // import { ToastrModule } from 'ngx-toastr';
 
@@ -28,7 +31,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     DashboardComponent,
     FunctionalMovementCreateComponent,
     FunctionalMovementIndexComponent,
-    FunctionalMovementUpdateComponent
+    FunctionalMovementUpdateComponent,
+    TrainComponent,
+    ModalComponent
   ]
 })
 

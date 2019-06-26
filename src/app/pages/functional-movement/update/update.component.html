@@ -9,7 +9,7 @@
           <h3 class="mb-0">Datos por actualizar</h3>
         </div>
         <div class="card-body">
-          <div *ngIf="!idFile; else notgba">
+          <div *ngIf="!idFile">
             <div class="col-md-12">
               <form [formGroup]="fileForm" (ngSubmit)="onSubmitFile()">
                   <label>Seleccionar archivo de bases de datos de gesturas</label>
@@ -25,9 +25,6 @@
             </div>
             <hr class="my-4" />
           </div>
-          <ng-template #notgba>
-            <button type="button" (click)="downloadGBD()" class="btn btn-primary">Descargar gbd</button>
-          </ng-template>
           <form role="form" [formGroup]="createForm" (ngSubmit)="onSubmit()">
             <div class="form-group mb-3">
                 <label>Valor del factor del movimiento</label>
@@ -39,6 +36,7 @@
                 <button type="button" class="btn btn-primary my-4" type="submit">Actualizar factor del movimiento</button>
               </div>
               <div *ngIf="error" class="alert alert-danger">{{error}}</div>
+              <div *ngIf="actualizado" class="alert alert-danger">{{actualizado}}</div>
         </form>
         </div>
 
@@ -48,9 +46,7 @@
         <div class="card snhadow">
             <div class="card-header bg-transparent border-0">
                 <div class="d-flex justify-content-between">
-                  <a class="btn btn-sm btn-info mr-4">Metadata</a>
                   <h2 class="mb-0">{{fm.name}}</h2>
-                  <a class="btn btn-sm btn-info mr-4">gbd</a>
                 </div>  
             </div>
             <div class="card-body">
@@ -87,10 +83,11 @@
                             <tr>
                               <th scope="col">Paso</th>
                               <th scope="col">Etiqueta</th>
+                              <th scope="col">Rango</th>
                             </tr>
                           </thead>
                           <tbody>
-                              <tr *ngFor="let step of fm.steps; let i = index">
+                              <tr *ngFor="let step of fm.rangeteps; let i = index">
                                   <th scope="row">
                                     <div class="media align-items-center">
                                       <div class="media-body">
@@ -99,7 +96,10 @@
                                     </div>
                                   </th>
                                   <td>
-                                    {{step}}
+                                    {{step.avg}}
+                                  </td>
+                                  <td>
+                                    {{step.min}} a {{step.max}}
                                   </td>
                                 </tr>
                           </tbody>

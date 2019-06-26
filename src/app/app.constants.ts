@@ -5,4 +5,6 @@ export class AppConstants {
     public static get  indexOfPage(): number { return 5; }
     public static get  recordsByTable(): number { return 5; }
 
+    public static get saltRound(): number{return 10;}
+
 }

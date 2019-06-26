@@ -15,11 +15,10 @@ export class ReadFileService {
             return;
         }
         const reader = new FileReader();
-
         reader.onerror = err => obs.error(err);
         reader.onabort = err => obs.error(err);
         reader.onload = () =>{
-            if (!(reader.result instanceof String)) {
+            if (!reader.result) {
                 obs.error(new Error('No se ha leido el texto'));
                 return;
             }
