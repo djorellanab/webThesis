@@ -8,6 +8,7 @@ import { FileService} from '../../../services/file.service';
 import { FunctionalMovementService } from '../../../services/functional-movement.service';
 import { first } from 'rxjs/operators';
 import{ AppUtils} from '../../../app.utils';
+import { modelIAService } from 'src/app/services/model-ia.service';
 
 @Component({
   selector: 'app-functional-movement-update',
@@ -32,7 +33,8 @@ export class FunctionalMovementUpdateComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private functionalMovementService: FunctionalMovementService,
-    private fileService: FileService) {
+    private fileService: FileService,
+    private modelIAService: modelIAService) {
   }
 
   ngOnInit() {
@@ -121,4 +123,19 @@ export class FunctionalMovementUpdateComponent implements OnInit, OnDestroy {
         });
   }
 
+  trainClick(){
+    this.loading = true;
+    this.modelIAService.train(this.id)
+    .pipe(first())
+    .subscribe(
+        data => {
+          this.idFile = data.idFile;
+          this.loading = false;
+          this.actualizado = "Se ha entrando los datos";
+        },
+        error => {
+            this.error = error;
+            this.loading = false;
+        });
+  }
 }

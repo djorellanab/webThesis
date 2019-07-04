@@ -1,0 +1,144 @@
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8"></div>
+<div class="container-fluid mt--7">
+  <img *ngIf="loading" class="pl-2"
+    src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+  <div class="row">
+    <div class="col">
+      <div class="card shadow">
+        <div class="card-header bg-transparent">
+          <h3 class="mb-0">Ingresa archivo de resultados</h3>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="fileForm" (ngSubmit)="onSubmitFile()">
+            <div class="form-group mb-3">
+              <div class="input-group input-group-alternative">
+                <input class="form-control" type="file" name="profile" (change)="onSelectedFile($event)"
+                  accept=".json" />
+              </div>
+            </div>
+            <div class="text-center">
+              <button type="button" class="btn btn-primary my-4" type="submit">Leer archivo de resultados</button>
+              <div *ngIf="error" class="alert alert-danger">{{error}}</div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+      <div class="col-xl-7 mb-5 mb-xl-0">
+          <div class="card shadow">
+              <div class="card-body">
+          <div class="chart">
+              <canvas id="chart-mf" class="chart-canvas"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <div class="row" *ngIf="reportAnalyzer.show === true">
+    <div class="col">
+      <div class="card shadow">
+        <div class="card-header bg-transparent">
+          <h3 class="mb-0">Resultados</h3>
+        </div>
+        <div class="card-body">
+          <h4>
+            <strong>Variables de analisis:</strong>
+          </h4>
+          <div class="h4 font-weight-300">
+            Rutina de <strong>{{reportAnalyzer.variablesAnalyzer.series}} series,</strong>
+            que consta de <strong>{{reportAnalyzer.variablesAnalyzer.workTime}} segundos de trabajo</strong>
+            y <strong>{{reportAnalyzer.variablesAnalyzer.restTime}} segundos de descanso</strong>
+          </div>
+          <h4>
+            <strong>Resultado generales:</strong>
+          </h4>
+          <div class="h4 font-weight-300">
+            Se realizo un total de <strong>{{reportAnalyzer.generalResults.repetitions}} repeticiones,</strong>,
+            durante un periodo de <strong>{{reportAnalyzer.generalResults.duration}} segundos,</strong>
+            con una intensidad maxima de <strong>{{reportAnalyzer.power.repetitions}} repeticiones en
+              {{reportAnalyzer.power.time}} segundos</strong>
+          </div>
+          <div *ngIf="reportIa.show === true">
+            <h4>
+              <strong>Datos de precision:</strong>
+            </h4>
+            <h5>Precision de cada paso</h5>
+            <div class="table-responsive">
+              <table class="table align-items-center table-flush">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">Paso</th>
+                    <th scope="col">Porcentaje de correctos</th>
+                    <th scope="col">Porcentaje de Incorrectos</th>
+                  </tr>
+                </thead>
+                <tr *ngFor="let detailStep of reportIa.detailSteps">
+                  <th scope="row">
+                    <div class="media align-items-center">
+                      <div class="media-body">
+                        <span class="mb-0 text-sm">{{detailStep.detail}}</span>
+                      </div>
+                    </div>
+                  </th>
+                  <td>
+                    {{detailStep.goodData}}
+                  </td>
+                  <td>
+                    {{detailStep.badData}}
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <h4>
+            <strong>Velocidades:</strong>
+          </h4>
+          <div class="h4 font-weight-300">
+            - Repeticiones promedio por serie: <strong>{{reportAnalyzer.speed.repetitionsBySerie}}
+              repeticiones/serie</strong>
+          </div>
+          <div class="h4 font-weight-300">
+            - Tiempo promedio por repeticion: <strong>{{reportAnalyzer.speed.timeByRepetition}}
+              segundos/repeticion</strong>
+          </div>
+          <h4>
+            <strong>Agilidad y flexibilidad:</strong>
+          </h4>
+          <div *ngFor="let agility of reportAnalyzer.agility">
+            <h5>Paso {{agility.step+1}}</h5>
+            <div class="h4 font-weight-300">
+              - Tiempo promedio por paso:<strong>{{agility.time}} segundos/paso</strong>
+            </div>
+            <div class="table-responsive">
+              <div class="h4 font-weight-300">
+                Flexibilidad
+              </div>
+              <table class="table align-items-center table-flush">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">Articulacion</th>
+                    <th scope="col">Grados promedio</th>
+                  </tr>
+                </thead>
+                <tr *ngFor="let joint of agility.joints">
+                  <th scope="row">
+                    <div class="media align-items-center">
+                      <div class="media-body">
+                        <span class="mb-0 text-sm">{{joint.name}}</span>
+                      </div>
+                    </div>
+                  </th>
+                  <td>
+                    {{joint.angle}}
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

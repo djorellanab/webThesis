@@ -45,9 +45,14 @@
     <div class="col-xl-8 order-xl-1">
         <div class="card snhadow">
             <div class="card-header bg-transparent border-0">
-                <div class="d-flex justify-content-between">
-                  <h2 class="mb-0">{{fm.name}}</h2>
-                </div>  
+                <div class="row align-items-center">
+                    <div class="col-8">
+                      <h3 class="mb-0">{{fm.name}}</h3>
+                    </div>
+                    <div class="col-4 text-right">
+                      <button class="btn btn-sm btn-primary" (click)="trainClick()">Settings</button>
+                    </div>
+                  </div>
             </div>
             <div class="card-body">
                 <h4>

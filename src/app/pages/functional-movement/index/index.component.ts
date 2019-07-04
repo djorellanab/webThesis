@@ -76,6 +76,9 @@ export class FunctionalMovementIndexComponent implements OnInit, OnDestroy, Afte
         else if(_action === "train"){
           this.router.navigate(["/functionalmovement/train/" + event.target.getAttribute("name")]);
         }
+        else if(_action === "reporte"){
+          this.router.navigate(["/functionalmovement/report/" + event.target.getAttribute("name")]);
+        }
         else if(_action === "table"){
           this.loadPage(+event.target.getAttribute("name"));
         }

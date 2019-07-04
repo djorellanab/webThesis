@@ -14,6 +14,7 @@ import { FunctionalMovementUpdateComponent } from '../../pages/functional-moveme
 import { ModalComponent } from '../../components/modal/modal.component'
 import { TrainComponent } from '../../pages/step-functional-movement/train/train.component';
 
+import { FunctionalMovementReportComponent } from 'src/app/pages/step-functional-movement/report/report.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 // import { ToastrModule } from 'ngx-toastr';
 
@@ -33,7 +34,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     FunctionalMovementIndexComponent,
     FunctionalMovementUpdateComponent,
     TrainComponent,
-    ModalComponent
+    ModalComponent,
+    FunctionalMovementReportComponent
   ]
 })
 
